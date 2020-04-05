@@ -4,7 +4,6 @@ import pickle
 import yaml
 import datetime
 
-print(datetime.datetime.now())
 
 with open(r'creds.yml') as file:
   creds = yaml.load(file, Loader=yaml.FullLoader)
@@ -45,12 +44,11 @@ except (OSError, IOError) as e:
 if previous_external_ip != current_external_ip:
   nfsn = Nfsn(login=creds['login'], api_key=creds['api_key'])
 
-  print("updating current ip address")
+  print("{ts} updating ip from {old_ip} to {new_ip}".format(ts=datetime.datetime.now(), new_ip=current_external_ip, old_ip=previous_external_ip))
   a_record = get_current_a_record(nfsn, creds['domain'])
   update_a_record(nfsn, creds['domain'], a_record, current_external_ip)
 else:
-  print("current external ip address is the same as previous external ip address")
-  print(current_external_ip)
+  print("{ts} ip has not changed from {ip}".format(ts=datetime.datetime.now(), ip=current_external_ip))
 
 pickle.dump(current_external_ip, open('external_ip.pickle', 'wb'))
 # pickle.dump('210.0.2.96', open('external_ip.pickle', 'wb'))
