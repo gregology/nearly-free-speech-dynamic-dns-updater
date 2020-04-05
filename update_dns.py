@@ -2,6 +2,9 @@ import urllib.request
 from nfsn import Nfsn
 import pickle
 import yaml
+import datetime
+
+print(datetime.datetime.now())
 
 with open(r'creds.yml') as file:
   creds = yaml.load(file, Loader=yaml.FullLoader)
