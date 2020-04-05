@@ -13,3 +13,9 @@ Requires Python 3.5
 update `creds.yml`
 
 `python update_dns.py`
+
+### Cron job
+
+Running every 5 mins
+
+`*/5 * * * * cd /home/user/nearly-free-speech-dynamic-dns-updater/ && python3.5 update_dns.py >> /home/user/dynamicdns.log 2>&1`
