@@ -1,4 +1,4 @@
-# nearly-free-speech-dynamic-dns-updater
+# Nearly free speech dynamic dns updater
 
 ## Installation
 
