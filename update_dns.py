@@ -1,12 +1,9 @@
 import urllib.request
 from nfsn import Nfsn
 import pickle
-import yaml
 import datetime
+import os
 
-
-with open(r'creds.yml') as file:
-  creds = yaml.load(file, Loader=yaml.FullLoader)
 
 def get_current_a_record(nfsn, domain, name=''):
   rrs = nfsn.dns(domain).listRRs(name=name)
@@ -42,13 +39,12 @@ except (OSError, IOError) as e:
   previous_external_ip = current_external_ip
 
 if previous_external_ip != current_external_ip:
-  nfsn = Nfsn(login=creds['login'], api_key=creds['api_key'])
+  nfsn = Nfsn(login=os.environ.get('LOGIN'), api_key=os.environ.get('API_KEY'))
 
   print("{ts} updating ip from {old_ip} to {new_ip}".format(ts=datetime.datetime.now(), new_ip=current_external_ip, old_ip=previous_external_ip))
-  a_record = get_current_a_record(nfsn, creds['domain'])
-  update_a_record(nfsn, creds['domain'], a_record, current_external_ip)
+  a_record = get_current_a_record(nfsn, os.environ.get('DOMAIN'))
+  update_a_record(nfsn, os.environ.get('DOMAIN'), a_record, current_external_ip)
 else:
   print("{ts} ip has not changed from {ip}".format(ts=datetime.datetime.now(), ip=current_external_ip))
 
 pickle.dump(current_external_ip, open('external_ip.pickle', 'wb'))
-# pickle.dump('210.0.2.96', open('external_ip.pickle', 'wb'))
